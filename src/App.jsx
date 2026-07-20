@@ -315,7 +315,7 @@ export default function App() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { type: '2D Model Asset', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', img: '/portfolio/art1.png' },
+                { type: '2D Model Asset', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', img: '/art1.jpeg' },
                 { type: '3D Model Asset', title: '3D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-indigo-400' },
                 { type: 'Animated Asset', title: '2D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-purple-400' },
                 { type: 'Animated Asset', title: '3D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-indigo-400' },
@@ -332,15 +332,17 @@ export default function App() {
                 { type: 'UI Overlay', title: 'Stream Overlay UI (Static)', icon: 'fa-regular fa-image', color: 'text-emerald-400' },
                 { type: 'UI Motion', title: 'Stream Overlay UI (Animated)', icon: 'fa-solid fa-clapperboard', color: 'text-emerald-400' }
               ].map((item, index) => (
-                <div key={index} className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden group hover:border-slate-700 transition-all flex flex-col justify-between">
-                  <div className="aspect-video bg-slate-800 flex items-center justify-center border-b border-slate-800 relative overflow-hidden">
+                <div className="aspect-video bg-slate-800 flex items-center justify-center border-b border-slate-800 relative overflow-hidden">
+                 {item.img ? (
+               <img 
+                src={item.img} 
+                alt={item.title} 
+                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                      ) : (
                     <i className={`${item.icon} text-slate-600 text-3xl group-hover:scale-110 transition-transform`}></i>
+                  )}
                   </div>
-                  <div className="p-4 bg-slate-900/90">
-                    <span className={`text-[10px] font-bold tracking-widest ${item.color} uppercase`}>{item.type}</span>
-                    <h4 className="text-sm font-semibold text-white mt-0.5">{item.title}</h4>
-                  </div>
-                </div>
               ))}
             </div>
           </div>
