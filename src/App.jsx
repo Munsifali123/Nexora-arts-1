@@ -315,7 +315,7 @@ export default function App() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { type: '2D Model Asset', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400' },
+                { type: '2D Model Asset', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', img: '/portfolio/art1.png' },
                 { type: '3D Model Asset', title: '3D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-indigo-400' },
                 { type: 'Animated Asset', title: '2D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-purple-400' },
                 { type: 'Animated Asset', title: '3D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-indigo-400' },
