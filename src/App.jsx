@@ -19,7 +19,7 @@ export default function App() {
 
   const portfolioItems = [
     // --- VTUBER MODELS ---
-    { type: '2D Model Asset', category: 'VTuber', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', media: '/art1.png', isVideo: false },
+    { type: '2D Model Asset', category: 'VTuber', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', media: '/2dmodel1.png', isVideo: false },
     { type: '3D Model Asset', category: 'VTuber', title: '3D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-indigo-400', media: '/art2.png', isVideo: false },
     { type: 'Animated Asset', category: 'VTuber', title: '2D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-purple-400', media: '/rigging1.mp4', isVideo: true },
     { type: 'Animated Asset', category: 'VTuber', title: '3D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-indigo-400', media: '/rigging2.mp4', isVideo: true },
