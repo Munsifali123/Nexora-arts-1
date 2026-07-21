@@ -19,26 +19,35 @@ export default function App() {
 
   const portfolioItems = [
     // --- VTUBER MODELS ---
-    { type: '2D Model Asset', category: 'VTuber', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', media: '/2dmodel1.png', isVideo: false },
-    { type: '3D Model Asset', category: 'VTuber', title: '3D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-indigo-400', media: '/art2.png', isVideo: false },
-    { type: 'Animated Asset', category: 'VTuber', title: '2D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-purple-400', media: '/rigging1.mp4', isVideo: true },
+    { type: '2D Model Asset', category: 'VTuber', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', media: '/art1.jpeg', isVideo: false },
+    { type: '3D Model Asset', category: 'VTuber', title: '3D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-indigo-400', media: '/art2.jpg', isVideo: false },
+    { type: 'Animated Asset', category: 'VTuber', title: '2D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-purple-400', media: '/rigging.mp4', isVideo: true },
     { type: 'Animated Asset', category: 'VTuber', title: '3D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-indigo-400', media: '/rigging2.mp4', isVideo: true },
 
     // --- CHIBI MODELS ---
-    { type: 'Chibi Model', category: 'Chibi', title: 'Full Body Chibi 2D Model', icon: 'fa-solid fa-face-smile-beam', color: 'text-pink-400', media: '', isVideo: false },
-    { type: 'Chibi Rigging', category: 'Chibi', title: 'Animated Chibi Live2D Model', icon: 'fa-solid fa-clapperboard', color: 'text-pink-400', media: '', isVideo: true },
+    //{ type: 'Chibi Model', category: 'Chibi', title: 'Full Body Chibi 2D Model', icon: 'fa-solid fa-face-smile-beam', color: 'text-pink-400', media: '', isVideo: false },
+   // { type: 'Chibi Rigging', category: 'Chibi', title: 'Animated Chibi Live2D Model', icon: 'fa-solid fa-clapperboard', color: 'text-pink-400', media: '', isVideo: true },
 
     // --- LOGOS & BANNERS ---
-    { type: 'Mascot Logo', category: 'Logos & Banners', title: 'Custom Streamer Vector Logo', icon: 'fa-solid fa-shield-halved', color: 'text-amber-400', media: '', isVideo: false },
-    { type: 'Channel Banner', category: 'Logos & Banners', title: 'Twitch & YouTube Banner Header', icon: 'fa-regular fa-image', color: 'text-amber-400', media: '', isVideo: false },
+    { type: 'Mascot Logo', category: 'Logos & Banners', title: 'Custom Streamer Vector Logo', icon: 'fa-solid fa-shield-halved', color: 'text-amber-400', media: '/banner.jpg', isVideo: false },
+    { type: 'Channel Banner', category: 'Logos & Banners', title: 'Twitch & YouTube Banner Header', icon: 'fa-regular fa-image', color: 'text-amber-400', media: '/logo.jpg', isVideo: false },
 
     // --- EMOTES & BADGES ---
-    { type: 'Emote Pack', category: 'Emotes', title: 'Custom Twitch/Discord Emote Set', icon: 'fa-solid fa-icons', color: 'text-emerald-400', media: '', isVideo: false },
-    { type: 'Animated Emote', category: 'Emotes', title: 'Animated GIF Emote Sequence', icon: 'fa-solid fa-clapperboard', color: 'text-emerald-400', media: '', isVideo: true },
+    { type: 'Emote Pack', category: 'Emotes', title: 'Custom Twitch/Discord Emote Set', icon: 'fa-solid fa-icons', color: 'text-emerald-400', media: '/emotes.jpg', isVideo: false },
+    { type: 'Animated Emote', category: 'Emotes', title: 'Animated GIF Emote Sequence', icon: 'fa-solid fa-clapperboard', color: 'text-emerald-400', media: 'emotes.mp4', isVideo: true },
 
     // --- OVERLAYS & SCREENS ---
-    { type: 'Overlay Design', category: 'Overlays', title: 'Intro / Outro Static Screens', icon: 'fa-regular fa-image', color: 'text-cyan-400', media: '', isVideo: false },
-    { type: 'Motion Graphic', category: 'Overlays', title: 'Be Right Back Screen (Animated)', icon: 'fa-solid fa-clapperboard', color: 'text-cyan-400', media: '', isVideo: true }
+    { type: 'Overlay Design', category: 'Overlays', title: 'Overlay Static ', icon: 'fa-regular fa-image', color: 'text-cyan-400', media: 'overlay.jpg', isVideo: false },
+    { type: 'Motion Graphic', category: 'Overlays', title: 'Overlay (Animated)', icon: 'fa-solid fa-clapperboard', color: 'text-cyan-400', media: 'animatedoverlay.mp4', isVideo: true },
+  
+    // --- intro & Outro ---
+    { type: 'Intro Video', category: 'live screens', title: 'Starting soon ', icon: 'fa-regular fa-image', color: 'text-cyan-400', media: 'intro.mp4', isVideo: true },
+    { type: 'Outro Video', category: 'live screens', title: 'Ending soon', icon: 'fa-solid fa-clapperboard', color: 'text-cyan-400', media: 'outro.mp4', isVideo: true }
+  
+  
+  
+  
+  
   ];
 
   const categories = ['All', 'VTuber', 'Chibi', 'Logos & Banners', 'Emotes', 'Overlays'];
