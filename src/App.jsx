@@ -323,7 +323,7 @@ export default function App() {
           <div className="flex items-center gap-1.5 bg-slate-950 px-3 py-1 rounded-full border border-slate-800/80">
             <i className="fa-solid fa-envelope text-purple-400 text-xs"></i>
             <a href="mailto:syedmunsifali@nexoraglobal.agency" className="hover:text-purple-400 transition-colors font-mono">
-              syedmunsifali@nexoraglobal.agency
+              contact@nexoraglobal.agency
             </a>
           </div>
           <div className="flex items-center gap-4">
