@@ -11,14 +11,21 @@
   },
   "dependencies": {
     "firebase": "^12.16.0",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
+    "@rolldown/binding-win32-x64-msvc": "^1.2.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "lightningcss-win32-x64-msvc": "^1.33.0",
     "oxlint": "^1.71.0",
-    "vite": "^8.1.1"
+    "vite": "^5.4.11"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true,
+    "@firebase/util@1.15.1": true,
+    "protobufjs@7.6.5": true
   }
 }
