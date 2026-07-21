@@ -43,11 +43,6 @@ export default function App() {
     // --- intro & Outro ---
     { type: 'Intro Video', category: 'live screens', title: 'Starting soon ', icon: 'fa-regular fa-image', color: 'text-cyan-400', media: 'intro.mp4', isVideo: true },
     { type: 'Outro Video', category: 'live screens', title: 'Ending soon', icon: 'fa-solid fa-clapperboard', color: 'text-cyan-400', media: 'outro.mp4', isVideo: true }
-  
-  
-  
-  
-  
   ];
 
   const categories = ['All', 'VTuber', 'Chibi', 'Logos & Banners', 'Emotes', 'Overlays'];
@@ -145,6 +140,147 @@ export default function App() {
               <a href="#contact" className="w-full sm:w-auto px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white font-medium rounded-xl transition-all shadow-lg shadow-purple-950/50">
                 Request a Custom Quote
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* PACKAGES CAROUSEL SECTION */}
+        <section id="packages" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-900">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-widest text-purple-400 mb-2 block">All-In-One Bundles</span>
+              <h2 className="text-3xl font-bold text-white">Streamer & Creator Packages</h2>
+            </div>
+            <div className="flex items-center gap-3 mt-4 md:mt-0">
+              <button onClick={() => scrollCarousel(-320)} className="p-3 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-500 text-slate-300 hover:text-white transition-all cursor-pointer">
+                <i className="fa-solid fa-chevron-left"></i>
+              </button>
+              <button onClick={() => scrollCarousel(320)} className="p-3 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-500 text-slate-300 hover:text-white transition-all cursor-pointer">
+                <i className="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <div id="package-carousel" className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6">
+            
+            {/* STARTER PACKAGE */}
+            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition-all">
+              <div>
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Essential Branding</span>
+                <h3 className="text-xl font-bold text-white mt-4">Stream Starter Pack</h3>
+                <p className="text-slate-400 text-xs mt-2 mb-6">Perfect for new streamers launching on Twitch or YouTube.</p>
+                <ul className="space-y-3 text-xs text-slate-300 mb-8">
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Vector Mascot Logo</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Channel Header Banner</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> 3 Custom Static Emotes</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Offline & Starting Soon Screens</li>
+                </ul>
+              </div>
+              <button onClick={() => selectService("Logo & Banner Branding")} className="w-full py-3 rounded-xl bg-slate-800 hover:bg-purple-600 text-white font-semibold text-xs transition-all cursor-pointer">
+                Select Package
+              </button>
+            </div>
+
+            {/* VTUBER DEBUT PACKAGE */}
+            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-gradient-to-b from-purple-950/40 to-slate-900 border border-purple-500/50 rounded-2xl p-6 flex flex-col justify-between shadow-xl shadow-purple-950/20 relative">
+              <span className="absolute -top-3 right-6 bg-purple-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">Most Popular</span>
+              <div>
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Complete VTuber Debut</span>
+                <h3 className="text-xl font-bold text-white mt-4">2D VTuber Full Suite</h3>
+                <p className="text-slate-400 text-xs mt-2 mb-6">Turnkey model & stream package ready for full VTube Studio setup.</p>
+                <ul className="space-y-3 text-xs text-slate-300 mb-8">
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Full Body 2D Model Art</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Advanced Live2D Rigging (Physics + Expressions)</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Animated Stream Overlay & Screens</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> 5 Expressive Animated Emotes</li>
+                </ul>
+              </div>
+              <button onClick={() => selectService("2D/3D VTuber Modeling")} className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-all shadow-lg shadow-purple-950/50 cursor-pointer">
+                Select Package
+              </button>
+            </div>
+
+            {/* CHIBI BUNDLE */}
+            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition-all">
+              <div>
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-pink-300 border border-slate-700">Cute & Expressive</span>
+                <h3 className="text-xl font-bold text-white mt-4">Chibi Model Package</h3>
+                <p className="text-slate-400 text-xs mt-2 mb-6">Adorable Chibi avatar designed & rigged for streaming or PNGtubing.</p>
+                <ul className="space-y-3 text-xs text-slate-300 mb-8">
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Full Body Chibi 2D Model</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Smooth Live2D Physics Rigging</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> 3 Custom Expressions</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Transparent PNG/PSD Master Files</li>
+                </ul>
+              </div>
+              <button onClick={() => selectService("Chibi Model & Rigging")} className="w-full py-3 rounded-xl bg-slate-800 hover:bg-purple-600 text-white font-semibold text-xs transition-all cursor-pointer">
+                Select Package
+              </button>
+            </div>
+
+            {/* MANGA & COMIC CREATOR */}
+            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition-all">
+              <div>
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-indigo-300 border border-slate-700">Storytellers</span>
+                <h3 className="text-xl font-bold text-white mt-4">Manga & Comic Layouts</h3>
+                <p className="text-slate-400 text-xs mt-2 mb-6">Professional illustration & panel layouts for authors and writers.</p>
+                <ul className="space-y-3 text-xs text-slate-300 mb-8">
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Character Design Sheets</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Storyboard & Panel Inking</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Webcomic Vertical Formatting</li>
+                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Full Print Resolution Files</li>
+                </ul>
+              </div>
+              <button onClick={() => selectService("Manga & Comic Design")} className="w-full py-3 rounded-xl bg-slate-800 hover:bg-purple-600 text-white font-semibold text-xs transition-all cursor-pointer">
+                Select Package
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        {/* SERVICES GRID SECTION */}
+        <section id="services" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-xs font-bold uppercase tracking-widest text-purple-400 mb-2 block">Our Expertise</span>
+            <h2 className="text-3xl font-bold text-white">Creative Services We Offer</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
+              <i className="fa-solid fa-vr-cardboard text-3xl text-purple-400 mb-4 block"></i>
+              <h3 className="text-lg font-bold text-white mb-2">2D & 3D VTuber Modeling</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">Custom character illustration and cutting-edge Live2D / 3D rigging with fluid physics, head tracking, and custom facial toggles.</p>
+            </div>
+
+            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
+              <i className="fa-solid fa-face-smile-beam text-3xl text-pink-400 mb-4 block"></i>
+              <h3 className="text-lg font-bold text-white mb-2">Chibi Models & Rigging</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">Cute, stylized Chibi avatars rigged for streaming or PNGtubing, engineered to match your personality and brand.</p>
+            </div>
+
+            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
+              <i className="fa-solid fa-icons text-3xl text-emerald-400 mb-4 block"></i>
+              <h3 className="text-lg font-bold text-white mb-2">Emotes & Sub Badges</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">High-visibility Twitch and Discord emotes, animated GIF emote sequences, and loyalty subscriber badges.</p>
+            </div>
+
+            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
+              <i className="fa-solid fa-shield-halved text-3xl text-amber-400 mb-4 block"></i>
+              <h3 className="text-lg font-bold text-white mb-2">Logos & Banner Branding</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">Scalable vector mascot logos, custom typography, and high-impact channel headers for Twitter, Twitch, and YouTube.</p>
+            </div>
+
+            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
+              <i className="fa-solid fa-desktop text-3xl text-cyan-400 mb-4 block"></i>
+              <h3 className="text-lg font-bold text-white mb-2">Stream Overlays & Screens</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">Animated OBS overlays, webcam borders, stinger transitions, and animated live screens (Starting Soon, BRB, Ending).</p>
+            </div>
+
+            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
+              <i className="fa-solid fa-book-open text-3xl text-indigo-400 mb-4 block"></i>
+              <h3 className="text-lg font-bold text-white mb-2">Manga & Comic Panels</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">Professional comic book illustration, webcomic panel formatting, line art, shading, and visual storytelling for authors.</p>
             </div>
           </div>
         </section>
@@ -327,7 +463,7 @@ export default function App() {
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-x-twitter text-base"></i></a>
+            <a href="nexora_arts" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-x-twitter text-base"></i></a>
             <a href="#" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-twitch text-base"></i></a>
             <a href="#" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-discord text-base"></i></a>
           </div>
