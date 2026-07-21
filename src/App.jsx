@@ -136,7 +136,7 @@ export default function App() {
               <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">To Striking Life</span>
             </h1>
             <p className="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-              Premium custom artwork, dynamic VTuber & Chibi models, custom emotes, logos, banners, and streaming assets.
+              Premium custom artwork, dynamic VTuber & Chibi models, custom emotes, logos, banners, streaming assets, and Manga & Comic panel layouts.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <a href="#packages" className="w-full sm:w-auto px-8 py-4 bg-slate-900 border border-slate-700 hover:border-purple-500 text-white font-medium rounded-xl transition-all shadow-md">
