@@ -44,7 +44,7 @@ export default function Terms() {
           <section>
             <h2 className="text-lg font-bold text-white mb-2">5. Contact Information</h2>
             <p>
-              Questions regarding these Terms of Service should be sent to <a href="mailto:syedmunsifali@nexoraglobal.agency" className="text-purple-400 font-mono underline">syedmunsifali@nexoraglobal.agency</a>.
+              Questions regarding these Terms of Service should be sent to <a href="mailto:contact@nexoraglobal.agency" className="text-purple-400 font-mono underline">contact@nexoraglobal.agency</a>.
             </p>
           </section>
         </div>

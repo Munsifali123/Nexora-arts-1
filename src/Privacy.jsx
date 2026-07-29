@@ -37,7 +37,7 @@ export default function Privacy() {
           <section>
             <h2 className="text-lg font-bold text-white mb-2">4. Contact & Inquiries</h2>
             <p>
-              For any questions or data requests regarding this Privacy Policy, please contact us at <a href="mailto:syedmunsifali@nexoraglobal.agency" className="text-purple-400 font-mono underline">syedmunsifali@nexoraglobal.agency</a>.
+              For any questions or data requests regarding this Privacy Policy, please contact us at <a href="mailto:contact@nexoraglobal.agency" className="text-purple-400 font-mono underline">contact@nexoraglobal.agency</a>.
             </p>
           </section>
         </div>
