@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { db } from './firebase'; 
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 
 export default function App() {
   const [formData, setFormData] = useState({
@@ -449,19 +450,27 @@ export default function App() {
           </div>
         </div>
       )}
-
-      {/* FOOTER */}
+{/* FOOTER */}
       <footer className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 border-t border-slate-800 py-3 lg:py-4 px-4 sm:px-6 lg:px-8 shadow-2xl">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 text-xs sm:text-sm text-slate-400">
           <div>
             &copy; 2026 <span className="text-white font-medium">NexoraArts</span>. All rights reserved.
           </div>
+
+          {/* LEGAL LINKS */}
+          <div className="flex items-center gap-4 text-xs">
+            <Link to="/terms" className="hover:text-purple-400 transition-colors">Terms of Service</Link>
+            <span className="text-slate-700">•</span>
+            <Link to="/privacy" className="hover:text-purple-400 transition-colors">Privacy Policy</Link>
+          </div>
+
           <div className="flex items-center gap-1.5 bg-slate-950 px-3 py-1 rounded-full border border-slate-800/80">
             <i className="fa-solid fa-envelope text-purple-400 text-xs"></i>
             <a href="mailto:syedmunsifali@nexoraglobal.agency" className="hover:text-purple-400 transition-colors font-mono">
               contact@nexoraglobal.agency
             </a>
           </div>
+
           <div className="flex items-center gap-4">
             <a href="nexora_arts" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-x-twitter text-base"></i></a>
             <a href="#" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-twitch text-base"></i></a>
