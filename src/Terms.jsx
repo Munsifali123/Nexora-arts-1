@@ -1,54 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+const sections = [
+  ['1. Scope and acceptance', 'These terms apply to custom artwork, VTuber models, rigging, emotes, branding, overlays, illustrations, and related digital services provided by NexoraArts. A project begins only after we confirm the scope, schedule, price, and required deposit in writing.'],
+  ['2. Quotes, deposits, and payment', 'Quotes are based on the information supplied and remain valid for 14 days unless stated otherwise. A non-refundable deposit reserves production time. Remaining milestone or final payments must be received before unwatermarked final files are delivered. Applicable platform or transfer fees may be added to the invoice.'],
+  ['3. Schedule and client responsibilities', 'Estimated timelines begin after we receive the deposit and all required references. The client is responsible for providing timely, accurate feedback and confirming they have permission to use all supplied references. Delayed feedback may move the project to the next available production window.'],
+  ['4. Revisions and changes', 'The agreed scope includes the revision rounds listed in the proposal. Consolidated feedback should be supplied at each milestone. New concepts, major changes after approval, or additional revision rounds may require a revised quote and schedule.'],
+  ['5. Cancellation and refunds', 'Because production time is reserved and custom work cannot be resold easily, deposits are non-refundable. If a client cancels after work begins, completed milestones remain payable. If NexoraArts must cancel and cannot provide an agreed deliverable, any payment for the undelivered portion will be refunded.'],
+  ['6. Intellectual property and usage', 'Copyright remains with NexoraArts unless a written assignment says otherwise. After full payment, the client receives the usage rights stated in the proposal. Commercial rights do not include reselling source files, minting NFTs, training AI systems, or claiming authorship unless explicitly licensed in writing. NexoraArts may display completed work in its portfolio unless confidentiality is agreed before work begins.'],
+  ['7. Delivery and file retention', 'Final files are delivered digitally in the formats listed in the proposal. Clients should download and back up their files promptly. We do not guarantee indefinite storage of project or source files after delivery.'],
+  ['8. Third-party platforms', 'Some deliverables may rely on software or platforms such as Live2D, VTube Studio, OBS, Twitch, Discord, or YouTube. NexoraArts is not responsible for third-party policy, compatibility, or service changes made after delivery.'],
+  ['9. Limitation of liability', 'To the maximum extent permitted by law, NexoraArts is not liable for indirect, incidental, or consequential losses. Our total liability relating to a project will not exceed the amount paid for that project. Nothing in these terms excludes rights that cannot legally be excluded.'],
+  ['10. Contact', 'Questions about these terms or a specific commission can be sent to contact@nexoraglobal.agency. Project-specific written proposals take priority where they conflict with these general terms.'],
+];
 
 export default function Terms() {
-  return (
-    <div className="bg-slate-950 text-slate-100 min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-8 sm:p-12 shadow-2xl">
-        <Link to="/" className="text-purple-400 hover:text-purple-300 text-sm font-semibold flex items-center gap-2 mb-8">
-          <i className="fa-solid fa-arrow-left"></i> Back to Home
-        </Link>
-        
-        <h1 className="text-3xl font-extrabold text-white mb-2">Terms of Service</h1>
-        <p className="text-slate-400 text-xs mb-8">Last Updated: July 2026</p>
-
-        <div className="space-y-6 text-slate-300 text-sm leading-relaxed">
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">1. Overview & Commission Scope</h2>
-            <p>
-              By commissioning artwork or assets from NexoraArts ("we", "us", "our"), you agree to the following terms and conditions. These terms govern all visual assets created, including VTuber models, rigging, emotes, logos, banners, overlays, and comic panel layouts.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">2. Payments & Refunds</h2>
-            <p>
-              Due to the custom nature of digital artwork, all payments made towards completed or in-progress commissions are non-refundable once work has commenced. Initial deposits or upfront milestone payments reserve project creation time.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">3. Intellectual Property & Commercial Usage</h2>
-            <p>
-              Unless explicitly agreed upon in writing, clients receive commercial rights to use the delivered graphics and assets for live streaming, digital content creation, personal branding, and channel promotion. NexoraArts retains artistic portfolio display rights to showcase commissioned work for self-promotion.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">4. Revisions & Approval</h2>
-            <p>
-              Revisions are provided at specified stages (e.g., initial sketch, line art, color blocking). Major structural revisions requested after a phase has been approved may incur additional asset revision fees.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">5. Contact Information</h2>
-            <p>
-              Questions regarding these Terms of Service should be sent to <a href="mailto:contact@nexoraglobal.agency" className="text-purple-400 font-mono underline">contact@nexoraglobal.agency</a>.
-            </p>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="legal-page"><header className="legal-header"><div className="container"><a className="brand" href="/"><span className="brand-mark">✦</span><span>Nexora<span>Arts</span></span></a><a className="legal-back" href="/">← Back to studio</a></div></header><main className="container legal-layout"><aside><span>Legal</span><h1>Terms of Service</h1><p>Effective August 3, 2026</p></aside><article><p className="legal-lead">Clear expectations make better creative partnerships. These terms explain how commissions, payments, revisions, delivery, and usage rights work.</p>{sections.map(([title, text]) => <section key={title}><h2>{title}</h2><p>{text}</p></section>)}</article></main><footer className="legal-footer"><div className="container">© 2026 NexoraArts <a href="/privacy">Privacy Policy</a></div></footer></div>;
 }

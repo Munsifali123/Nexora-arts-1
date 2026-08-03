@@ -1,483 +1,277 @@
-import React, { useState } from 'react';
-import { db } from './firebase'; 
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+
+const PHONE = '+19179620181';
+const WHATSAPP_URL = 'https://wa.me/19179620181?text=Hi%20NexoraArts%2C%20I%27d%20like%20to%20discuss%20a%20creative%20project.';
+const X_URL = 'https://x.com/NephiiNerine';
+
+const portfolioItems = [
+  { category: 'VTuber', title: 'Celestial 2D VTuber', type: 'Character design', media: '/art1.jpeg', featured: true },
+  { category: 'VTuber', title: '3D Character Model', type: 'Full-body model', media: '/art2.jpg' },
+  { category: 'VTuber', title: 'Live2D in Motion', type: 'Art + rigging', media: '/rigging.mp4', video: true },
+  { category: 'VTuber', title: 'Expressive 3D Rig', type: 'Model + rigging', media: '/rigging2.mp4', video: true },
+  { category: 'Branding', title: 'Creator Identity System', type: 'Logo + banner', media: '/banner.jpg' },
+  { category: 'Branding', title: 'Mascot Logo', type: 'Vector identity', media: '/logo.jpg' },
+  { category: 'Emotes', title: 'Community Emote Set', type: 'Static emotes', media: '/emotes.jpg' },
+  { category: 'Emotes', title: 'Animated Reactions', type: 'Motion emotes', media: '/emotes.mp4', video: true },
+  { category: 'Streams', title: 'Immersive Stream Overlay', type: 'Static overlay', media: '/overlay.jpg' },
+  { category: 'Streams', title: 'Overlay in Motion', type: 'Animated overlay', media: '/animatedoverlay.mp4', video: true },
+  { category: 'Streams', title: 'Starting Soon', type: 'Live screen', media: '/intro.mp4', video: true },
+  { category: 'Streams', title: 'Ending Screen', type: 'Live screen', media: '/outro.mp4', video: true },
+];
+
+const services = [
+  { number: '01', title: 'VTuber worlds', text: 'Original 2D and 3D character design, model preparation, and expressive rigging built around your personality.' },
+  { number: '02', title: 'Creator identity', text: 'Memorable logos, channel banners, brand systems, and art direction that make every profile feel unmistakably yours.' },
+  { number: '03', title: 'Emotes & badges', text: 'Readable, expressive static and animated reactions designed for Twitch, Discord, YouTube, and community spaces.' },
+  { number: '04', title: 'Stream motion', text: 'Cinematic overlays, transitions, alerts, and live screens that make every broadcast feel like an event.' },
+  { number: '05', title: 'Chibi characters', text: 'Playful chibi illustrations and rig-ready avatars with personality, charm, and clean production files.' },
+  { number: '06', title: 'Manga storytelling', text: 'Character sheets, storyboards, panel art, and webcomic layouts shaped for strong visual pacing.' },
+];
+
+const packages = [
+  { tag: 'Essential', name: 'Creator Launch', description: 'A polished visual foundation for a new channel.', items: ['Mascot or wordmark logo', 'Channel banner', '3 static emotes', 'Starting-soon screen'], service: 'Logo & Banner Branding' },
+  { tag: 'Most requested', name: 'VTuber Debut', description: 'A cohesive model and broadcast world for your reveal.', items: ['Full-body 2D model art', 'Advanced Live2D rigging', 'Animated overlay set', '5 animated emotes'], service: '2D/3D VTuber Modeling', featured: true },
+  { tag: 'Expressive', name: 'Chibi Companion', description: 'A small character with a big on-screen personality.', items: ['Full-body chibi art', 'Live2D-ready layers', '3 expressions', 'Source production files'], service: 'Chibi Model & Rigging' },
+];
+
+function Icon({ name, size = 20 }) {
+  const paths = {
+    arrow: <><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></>,
+    check: <path d="m5 12 4 4L19 6"/>,
+    close: <><path d="m6 6 12 12"/><path d="m18 6-12 12"/></>,
+    menu: <><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></>,
+    play: <path d="m9 7 8 5-8 5Z"/>,
+    phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z"/>,
+    mail: <><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></>,
+    whatsapp: <><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8Z"/><path d="M9 8c.5 2.5 2.5 4.5 5 5"/></>,
+    x: <><path d="M4 4l16 16"/><path d="M20 4 4 20"/></>,
+    spark: <><path d="m12 3-1.4 4.1L6.5 8.5l4.1 1.4L12 14l1.4-4.1 4.1-1.4-4.1-1.4Z"/><path d="m19 15-.7 2.3L16 18l2.3.7L19 21l.7-2.3L22 18l-2.3-.7Z"/></>,
+  };
+  return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
+}
+
+function Media({ item, eager = false }) {
+  if (item.video) {
+    return <video src={item.media} muted loop playsInline preload="metadata" aria-label={item.title} />;
+  }
+  return <img src={item.media} alt={`${item.title} — ${item.type} by NexoraArts`} loading={eager ? 'eager' : 'lazy'} decoding="async" />;
+}
 
 export default function App() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    service: '',
-    budget: '',
-    description: ''
-  });
-  const [loading, setLoading] = useState(false);
-
-  // LIGHTBOX MODAL & FILTER STATES
+  const [menuOpen, setMenuOpen] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState({ type: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', budget: '', description: '', website: '' });
+  const dialogRef = useRef(null);
+  const lastFocusRef = useRef(null);
 
-  const portfolioItems = [
-    // --- VTUBER MODELS ---
-    { type: '2D Model Asset', category: 'VTuber', title: '2D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-purple-400', media: '/art1.jpeg', isVideo: false },
-    { type: '3D Model Asset', category: 'VTuber', title: '3D VTuber Model (Full Body)', icon: 'fa-regular fa-image', color: 'text-indigo-400', media: '/art2.jpg', isVideo: false },
-    { type: 'Animated Asset', category: 'VTuber', title: '2D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-purple-400', media: '/rigging.mp4', isVideo: true },
-    { type: 'Animated Asset', category: 'VTuber', title: '3D VTuber Model + Full Rigging', icon: 'fa-solid fa-clapperboard', color: 'text-indigo-400', media: '/rigging2.mp4', isVideo: true },
+  const categories = ['All', 'VTuber', 'Branding', 'Emotes', 'Streams'];
+  const filteredItems = activeCategory === 'All' ? portfolioItems : portfolioItems.filter((item) => item.category === activeCategory);
 
-    // --- CHIBI MODELS ---
-    //{ type: 'Chibi Model', category: 'Chibi', title: 'Full Body Chibi 2D Model', icon: 'fa-solid fa-face-smile-beam', color: 'text-pink-400', media: '', isVideo: false },
-   // { type: 'Chibi Rigging', category: 'Chibi', title: 'Animated Chibi Live2D Model', icon: 'fa-solid fa-clapperboard', color: 'text-pink-400', media: '', isVideo: true },
-
-    // --- LOGOS & BANNERS ---
-    { type: 'Mascot Logo', category: 'Logos & Banners', title: 'Custom Streamer Vector Logo', icon: 'fa-solid fa-shield-halved', color: 'text-amber-400', media: '/banner.jpg', isVideo: false },
-    { type: 'Channel Banner', category: 'Logos & Banners', title: 'Twitch & YouTube Banner Header', icon: 'fa-regular fa-image', color: 'text-amber-400', media: '/logo.jpg', isVideo: false },
-
-    // --- EMOTES & BADGES ---
-    { type: 'Emote Pack', category: 'Emotes', title: 'Custom Twitch/Discord Emote Set', icon: 'fa-solid fa-icons', color: 'text-emerald-400', media: '/emotes.jpg', isVideo: false },
-    { type: 'Animated Emote', category: 'Emotes', title: 'Animated GIF Emote Sequence', icon: 'fa-solid fa-clapperboard', color: 'text-emerald-400', media: 'emotes.mp4', isVideo: true },
-
-    // --- OVERLAYS & SCREENS ---
-    { type: 'Overlay Design', category: 'Overlays', title: 'Overlay Static ', icon: 'fa-regular fa-image', color: 'text-cyan-400', media: 'overlay.jpg', isVideo: false },
-    { type: 'Motion Graphic', category: 'Overlays', title: 'Overlay (Animated)', icon: 'fa-solid fa-clapperboard', color: 'text-cyan-400', media: 'animatedoverlay.mp4', isVideo: true },
-  
-    // --- intro & Outro ---
-    { type: 'Intro Video', category: 'live screens', title: 'Starting soon ', icon: 'fa-regular fa-image', color: 'text-cyan-400', media: 'intro.mp4', isVideo: true },
-    { type: 'Outro Video', category: 'live screens', title: 'Ending soon', icon: 'fa-solid fa-clapperboard', color: 'text-cyan-400', media: 'outro.mp4', isVideo: true }
-  ];
-
-  const categories = ['All', 'VTuber', 'Chibi', 'Logos & Banners', 'Emotes', 'Overlays'];
-
-  const filteredItems = activeCategory === 'All' 
-    ? portfolioItems 
-    : portfolioItems.filter(item => item.category === activeCategory);
-
-  const scrollCarousel = (distance) => {
-    const carousel = document.getElementById('package-carousel');
-    if (carousel) {
-      carousel.scrollBy({ left: distance, behavior: 'smooth' });
+  useEffect(() => {
+    const observers = document.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) {
+      observers.forEach((element) => element.classList.add('is-visible'));
+      return undefined;
     }
-  };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('is-visible'));
+    }, { threshold: 0.12 });
+    observers.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, [activeCategory]);
 
-  const selectService = (categoryValue) => {
-    setFormData(prev => ({ ...prev, service: categoryValue }));
+  useEffect(() => {
+    if (!selectedMedia) return undefined;
+    lastFocusRef.current = document.activeElement;
+    document.body.classList.add('modal-open');
+    dialogRef.current?.focus();
+    const closeOnEscape = (event) => event.key === 'Escape' && setSelectedMedia(null);
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.classList.remove('modal-open');
+      window.removeEventListener('keydown', closeOnEscape);
+      lastFocusRef.current?.focus?.();
+    };
+  }, [selectedMedia]);
+
+  const selectService = (service) => {
+    setFormData((current) => ({ ...current, service }));
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleInputChange = (e, field) => {
-    setFormData(prev => ({ ...prev, [field]: e.target.value }));
-  };
+  const updateField = (event) => setFormData((current) => ({ ...current, [event.target.name]: event.target.value }));
 
-  const handleFormSubmit = async (event) => {
+  const submitForm = async (event) => {
     event.preventDefault();
+    setStatus({ type: '', message: '' });
+    if (formData.website) return;
+    if (Date.now() - Number(localStorage.getItem('nexora-last-inquiry') || 0) < 60000) {
+      setStatus({ type: 'error', message: 'Please wait a moment before sending another request.' });
+      return;
+    }
     setLoading(true);
-
     try {
-      await addDoc(collection(db, "artInquiries"), {
-        ...formData,
-        createdAt: serverTimestamp()
-      });
-      alert("Success! Your creative brief has reached NexoraArts. We will review the details and get back to you shortly.");
-      setFormData({ name: '', email: '', phone: '', service: '', budget: '', description: '' });
+      const [{ addDoc, collection, serverTimestamp }, { db }] = await Promise.all([
+        import('firebase/firestore'),
+        import('./firebase'),
+      ]);
+      const cleanData = {
+        name: formData.name.trim().slice(0, 100),
+        email: formData.email.trim().toLowerCase().slice(0, 160),
+        phone: formData.phone.trim().slice(0, 40),
+        service: formData.service.slice(0, 80),
+        budget: formData.budget.slice(0, 40),
+        description: formData.description.trim().slice(0, 3000),
+      };
+      await addDoc(collection(db, 'artInquiries'), { ...cleanData, createdAt: serverTimestamp(), source: 'nexoraglobal.space' });
+      localStorage.setItem('nexora-last-inquiry', String(Date.now()));
+      setFormData({ name: '', email: '', phone: '', service: '', budget: '', description: '', website: '' });
+      setStatus({ type: 'success', message: 'Your creative brief is in. We’ll respond within 1–2 business days.' });
     } catch (error) {
-      console.error("Error writing document to Firestore: ", error);
-      alert("Something went wrong saving your inquiry. Please try again or call us directly!");
+      console.error('Inquiry submission failed:', error);
+      setStatus({ type: 'error', message: 'We couldn’t send that just now. Please reach us on WhatsApp instead.' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-slate-950 text-slate-100 font-sans flex flex-col min-h-screen pb-16 lg:pb-12 scroll-smooth">
-      
-      {/* NAVIGATION BAR */}
-      <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <i className="fa-solid fa-palette text-purple-500 text-2xl"></i>
-            <span className="text-2xl font-black tracking-wider bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400 bg-clip-text text-transparent">
-              NexoraArts
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <a href="#" className="hover:text-purple-400 transition-colors">Home</a>
-            <a href="#packages" className="hover:text-purple-400 transition-colors">Streamer Packages</a>
-            <a href="#services" className="hover:text-purple-400 transition-colors">Services</a>
-            <a href="#portfolio" className="hover:text-purple-400 transition-colors">Portfolio</a>
-            <a href="#contact" className="hover:text-purple-400 transition-colors">Contact</a>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <a href="tel:+19179620181" className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold py-2.5 px-5 rounded-full text-sm shadow-lg shadow-purple-900/40 transition-all transform hover:-translate-y-0.5">
-              <i className="fa-solid fa-phone"></i>
-              <span>+1 (917) 962-0181</span>
-            </a>
+    <div className="site-shell">
+      <header className="site-header">
+        <div className="container header-inner">
+          <a className="brand" href="#top" aria-label="NexoraArts home">
+            <span className="brand-mark"><Icon name="spark" size={19} /></span>
+            <span>Nexora<span>Arts</span></span>
+          </a>
+          <nav className={`main-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Primary navigation">
+            {['Work', 'Services', 'Process', 'Contact'].map((label) => (
+              <a key={label} href={`#${label.toLowerCase()}`} onClick={() => setMenuOpen(false)}>{label}</a>
+            ))}
+          </nav>
+          <div className="header-actions">
+            <a className="header-contact" href={WHATSAPP_URL} target="_blank" rel="noreferrer"><Icon name="whatsapp" size={18} /><span>Let’s talk</span></a>
+            <button className="menu-button" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen((value) => !value)}>
+              <Icon name={menuOpen ? 'close' : 'menu'} size={22} />
+            </button>
           </div>
         </div>
-      </nav>
+      </header>
 
-      {/* MAIN CONTENT */}
-      <main className="flex-grow">
-        
-        {/* HERO SECTION */}
-        <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-slate-900 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-950/30 via-slate-950 to-slate-950">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-40"></div>
-          <div className="relative max-w-5xl mx-auto text-center">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span> Open For Commissions
-            </span>
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-              Bringing Your Digital Visions <br />
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">To Striking Life</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-              Premium custom artwork, dynamic VTuber & Chibi models, custom emotes, logos, banners, streaming assets, and Manga & Comic panel layouts.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-              <a href="#packages" className="w-full sm:w-auto px-8 py-4 bg-slate-900 border border-slate-700 hover:border-purple-500 text-white font-medium rounded-xl transition-all shadow-md">
-                Browse Streamer Packages
-              </a>
-              <a href="#contact" className="w-full sm:w-auto px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white font-medium rounded-xl transition-all shadow-lg shadow-purple-950/50">
-                Request a Custom Quote
-              </a>
+      <main id="main-content">
+        <section className="hero" id="top">
+          <div className="hero-glow glow-one" />
+          <div className="hero-glow glow-two" />
+          <div className="container hero-grid">
+            <div className="hero-copy" data-reveal>
+              <div className="eyebrow"><span /> Open for selected commissions</div>
+              <h1>We turn your<br /><em>imagination</em><br />into a living world.</h1>
+              <p>Original character art, expressive VTuber models, and cinematic stream identities made for creators who refuse to look ordinary.</p>
+              <div className="hero-actions">
+                <a className="button button-primary" href="#work">Explore the work <Icon name="arrow" /></a>
+                <a className="text-link" href="#contact">Start a commission <span>↗</span></a>
+              </div>
+              <div className="trust-row" aria-label="Service highlights">
+                <span>Worldwide commissions</span><span>Built from scratch</span><span>Commercial-ready files</span>
+              </div>
+            </div>
+            <div className="hero-art" data-reveal>
+              <div className="orbit orbit-one" /><div className="orbit orbit-two" />
+              <div className="art-frame art-frame-back"><img src="/art2.jpg" alt="3D character artwork by NexoraArts" fetchPriority="high" /></div>
+              <div className="art-frame art-frame-front"><img src="/art1.jpeg" alt="2D VTuber character artwork by NexoraArts" fetchPriority="high" /></div>
+              <div className="floating-note note-one"><span>✦</span> Original characters</div>
+              <div className="floating-note note-two"><strong>2D</strong><span>Art + rigging</span></div>
             </div>
           </div>
+          <div className="marquee" aria-hidden="true"><div>VTUBER MODELS ✦ LIVE2D RIGGING ✦ EMOTES ✦ STREAM WORLDS ✦ CHARACTER ART ✦ VTUBER MODELS ✦ LIVE2D RIGGING ✦ EMOTES ✦</div></div>
         </section>
 
-        {/* PACKAGES CAROUSEL SECTION */}
-        <section id="packages" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-slate-900">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-purple-400 mb-2 block">All-In-One Bundles</span>
-              <h2 className="text-3xl font-bold text-white">Streamer & Creator Packages</h2>
+        <section className="work-section section" id="work">
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <div><span className="kicker">Selected work</span><h2>Art with a pulse.</h2></div>
+              <p>Every piece begins as a blank canvas and becomes part of a creator’s world—designed to move, emote, and connect.</p>
             </div>
-            <div className="flex items-center gap-3 mt-4 md:mt-0">
-              <button onClick={() => scrollCarousel(-320)} className="p-3 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-500 text-slate-300 hover:text-white transition-all cursor-pointer">
-                <i className="fa-solid fa-chevron-left"></i>
-              </button>
-              <button onClick={() => scrollCarousel(320)} className="p-3 rounded-full bg-slate-900 border border-slate-800 hover:border-purple-500 text-slate-300 hover:text-white transition-all cursor-pointer">
-                <i className="fa-solid fa-chevron-right"></i>
-              </button>
+            <div className="category-tabs" role="group" aria-label="Filter portfolio">
+              {categories.map((category) => <button className={activeCategory === category ? 'active' : ''} key={category} type="button" aria-pressed={activeCategory === category} onClick={() => setActiveCategory(category)}>{category}</button>)}
             </div>
-          </div>
-
-          <div id="package-carousel" className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6">
-            
-            {/* STARTER PACKAGE */}
-            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition-all">
-              <div>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Essential Branding</span>
-                <h3 className="text-xl font-bold text-white mt-4">Stream Starter Pack</h3>
-                <p className="text-slate-400 text-xs mt-2 mb-6">Perfect for new streamers launching on Twitch or YouTube.</p>
-                <ul className="space-y-3 text-xs text-slate-300 mb-8">
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Vector Mascot Logo</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Channel Header Banner</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> 3 Custom Static Emotes</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Offline & Starting Soon Screens</li>
-                </ul>
-              </div>
-              <button onClick={() => selectService("Logo & Banner Branding")} className="w-full py-3 rounded-xl bg-slate-800 hover:bg-purple-600 text-white font-semibold text-xs transition-all cursor-pointer">
-                Select Package
-              </button>
-            </div>
-
-            {/* VTUBER DEBUT PACKAGE */}
-            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-gradient-to-b from-purple-950/40 to-slate-900 border border-purple-500/50 rounded-2xl p-6 flex flex-col justify-between shadow-xl shadow-purple-950/20 relative">
-              <span className="absolute -top-3 right-6 bg-purple-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">Most Popular</span>
-              <div>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Complete VTuber Debut</span>
-                <h3 className="text-xl font-bold text-white mt-4">2D VTuber Full Suite</h3>
-                <p className="text-slate-400 text-xs mt-2 mb-6">Turnkey model & stream package ready for full VTube Studio setup.</p>
-                <ul className="space-y-3 text-xs text-slate-300 mb-8">
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Full Body 2D Model Art</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Advanced Live2D Rigging (Physics + Expressions)</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Animated Stream Overlay & Screens</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> 5 Expressive Animated Emotes</li>
-                </ul>
-              </div>
-              <button onClick={() => selectService("2D/3D VTuber Modeling")} className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-all shadow-lg shadow-purple-950/50 cursor-pointer">
-                Select Package
-              </button>
-            </div>
-
-            {/* CHIBI BUNDLE */}
-            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition-all">
-              <div>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-pink-300 border border-slate-700">Cute & Expressive</span>
-                <h3 className="text-xl font-bold text-white mt-4">Chibi Model Package</h3>
-                <p className="text-slate-400 text-xs mt-2 mb-6">Adorable Chibi avatar designed & rigged for streaming or PNGtubing.</p>
-                <ul className="space-y-3 text-xs text-slate-300 mb-8">
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Full Body Chibi 2D Model</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Smooth Live2D Physics Rigging</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> 3 Custom Expressions</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Transparent PNG/PSD Master Files</li>
-                </ul>
-              </div>
-              <button onClick={() => selectService("Chibi Model & Rigging")} className="w-full py-3 rounded-xl bg-slate-800 hover:bg-purple-600 text-white font-semibold text-xs transition-all cursor-pointer">
-                Select Package
-              </button>
-            </div>
-
-            {/* MANGA & COMIC CREATOR */}
-            <div className="min-w-[300px] sm:min-w-[340px] snap-start bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition-all">
-              <div>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-indigo-300 border border-slate-700">Storytellers</span>
-                <h3 className="text-xl font-bold text-white mt-4">Manga & Comic Layouts</h3>
-                <p className="text-slate-400 text-xs mt-2 mb-6">Professional illustration & panel layouts for authors and writers.</p>
-                <ul className="space-y-3 text-xs text-slate-300 mb-8">
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Character Design Sheets</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Storyboard & Panel Inking</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Webcomic Vertical Formatting</li>
-                  <li className="flex items-center gap-2"><i className="fa-solid fa-check text-purple-400"></i> Full Print Resolution Files</li>
-                </ul>
-              </div>
-              <button onClick={() => selectService("Manga & Comic Design")} className="w-full py-3 rounded-xl bg-slate-800 hover:bg-purple-600 text-white font-semibold text-xs transition-all cursor-pointer">
-                Select Package
-              </button>
-            </div>
-
-          </div>
-        </section>
-
-        {/* SERVICES GRID SECTION */}
-        <section id="services" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-xs font-bold uppercase tracking-widest text-purple-400 mb-2 block">Our Expertise</span>
-            <h2 className="text-3xl font-bold text-white">Creative Services We Offer</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
-              <i className="fa-solid fa-vr-cardboard text-3xl text-purple-400 mb-4 block"></i>
-              <h3 className="text-lg font-bold text-white mb-2">2D & 3D VTuber Modeling</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Custom character illustration and cutting-edge Live2D / 3D rigging with fluid physics, head tracking, and custom facial toggles.</p>
-            </div>
-
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
-              <i className="fa-solid fa-face-smile-beam text-3xl text-pink-400 mb-4 block"></i>
-              <h3 className="text-lg font-bold text-white mb-2">Chibi Models & Rigging</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Cute, stylized Chibi avatars rigged for streaming or PNGtubing, engineered to match your personality and brand.</p>
-            </div>
-
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
-              <i className="fa-solid fa-icons text-3xl text-emerald-400 mb-4 block"></i>
-              <h3 className="text-lg font-bold text-white mb-2">Emotes & Sub Badges</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">High-visibility Twitch and Discord emotes, animated GIF emote sequences, and loyalty subscriber badges.</p>
-            </div>
-
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
-              <i className="fa-solid fa-shield-halved text-3xl text-amber-400 mb-4 block"></i>
-              <h3 className="text-lg font-bold text-white mb-2">Logos & Banner Branding</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Scalable vector mascot logos, custom typography, and high-impact channel headers for Twitter, Twitch, and YouTube.</p>
-            </div>
-
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
-              <i className="fa-solid fa-desktop text-3xl text-cyan-400 mb-4 block"></i>
-              <h3 className="text-lg font-bold text-white mb-2">Stream Overlays & Screens</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Animated OBS overlays, webcam borders, stinger transitions, and animated live screens (Starting Soon, BRB, Ending).</p>
-            </div>
-
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 hover:border-purple-500/40 transition-all">
-              <i className="fa-solid fa-book-open text-3xl text-indigo-400 mb-4 block"></i>
-              <h3 className="text-lg font-bold text-white mb-2">Manga & Comic Panels</h3>
-              <p className="text-slate-400 text-xs leading-relaxed">Professional comic book illustration, webcomic panel formatting, line art, shading, and visual storytelling for authors.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* PORTFOLIO SHOWCASE SECTION WITH CATEGORY FILTER & LIGHTBOX MODAL */}
-        <section id="portfolio" className="py-20 bg-slate-900/20 border-t border-slate-900 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold tracking-tight text-white mb-2">Our Digital Asset Portfolio</h2>
-              <p className="text-slate-400 text-sm mb-8">Filter by asset type and click on any item to view full uncropped resolution.</p>
-              
-              {/* CATEGORY FILTER BUTTONS */}
-              <div className="flex flex-wrap justify-center gap-2 mb-8">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-4 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                      activeCategory === cat 
-                        ? 'bg-purple-600 text-white shadow-lg shadow-purple-950/50' 
-                        : 'bg-slate-900 text-slate-400 border border-slate-800 hover:border-slate-700 hover:text-white'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* PORTFOLIO GRID */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="portfolio-grid">
               {filteredItems.map((item, index) => (
-                <div 
-                  key={index} 
-                  onClick={() => item.media && setSelectedMedia(item)}
-                  className={`bg-slate-900 border border-slate-800 rounded-xl overflow-hidden group hover:border-purple-500/80 transition-all flex flex-col justify-between ${item.media ? 'cursor-pointer' : ''}`}
-                >
-                  <div className="aspect-video bg-slate-800 flex items-center justify-center border-b border-slate-800 relative overflow-hidden">
-                    {item.media ? (
-                      <>
-                        {item.isVideo ? (
-                          <video src={item.media} className="w-full h-full object-cover" muted loop autoPlay />
-                        ) : (
-                          <img 
-                            src={item.media} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-purple-950/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-2">
-                          <i className={`fa-solid ${item.isVideo ? 'fa-circle-play' : 'fa-magnifying-glass-plus'} text-2xl text-purple-400 animate-bounce`}></i>
-                          <span className="text-xs font-semibold tracking-wider uppercase">View Full Screen</span>
-                        </div>
-                      </>
-                    ) : (
-                      <i className={`${item.icon} text-slate-600 text-3xl group-hover:scale-110 transition-transform`}></i>
-                    )}
-                  </div>
-                  <div className="p-4 bg-slate-900/90">
-                    <span className={`text-[10px] font-bold tracking-widest ${item.color} uppercase`}>{item.type}</span>
-                    <h4 className="text-sm font-semibold text-white mt-0.5">{item.title}</h4>
-                  </div>
-                </div>
+                <button className={`portfolio-card ${item.featured ? 'portfolio-featured' : ''}`} key={item.title} type="button" onClick={() => setSelectedMedia(item)} data-reveal aria-label={`View ${item.title}`}>
+                  <div className="portfolio-media"><Media item={item} eager={index < 2} /><span className="media-action"><Icon name={item.video ? 'play' : 'arrow'} /></span></div>
+                  <div className="portfolio-meta"><div><span>{item.type}</span><h3>{item.title}</h3></div><span className="card-index">{String(index + 1).padStart(2, '0')}</span></div>
+                </button>
               ))}
             </div>
           </div>
         </section>
 
-        {/* INTAKE FORM */}
-        <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
-          <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 p-8 sm:p-12 rounded-3xl shadow-2xl relative">
-            <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
-            
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold tracking-tight text-white mb-2">Let's Start Your Next Project</h2>
-              <p className="text-slate-400 text-sm">Fill out your project requirements below to receive a custom proposal.</p>
-            </div>
-
-            <form onSubmit={handleFormSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Full Name</label>
-                  <input type="text" required value={formData.name} onChange={(e) => handleInputChange(e, 'name')} className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Email Address</label>
-                  <input type="email" required value={formData.email} onChange={(e) => handleInputChange(e, 'email')} className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Phone Number</label>
-                  <input type="tel" placeholder="+1 (xxx) xxx-xxxx" required value={formData.phone} onChange={(e) => handleInputChange(e, 'phone')} className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all" />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Service Needed</label>
-                  <select required value={formData.service} onChange={(e) => handleInputChange(e, 'service')} className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-slate-300 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all">
-                    <option value="" disabled>Select a primary category</option>
-                    <option value="2D/3D VTuber Modeling">2D/3D VTuber Modeling & Rigging</option>
-                    <option value="Chibi Model & Rigging">Chibi Model Design & Rigging</option>
-                    <option value="Logo & Banner Branding">Vector Logo & Channel Banner</option>
-                    <option value="Emotes & Sub Badges">Custom Twitch/Discord Emotes</option>
-                    <option value="Stream Assets & Overlays">Stream Overlays & Screens</option>
-                    <option value="Manga & Comic Design">Manga & Comic Panel Layouts</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Estimated Budget (USD)</label>
-                <select required value={formData.budget} onChange={(e) => handleInputChange(e, 'budget')} className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-slate-300 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all">
-                  <option value="" disabled>Select your budget bracket</option>
-                  <option value="Under $500">Under $500</option>
-                  <option value="$500 - $1,000">$500 - $1,000</option>
-                  <option value="$1,000 - $2,500">$1,000 - $2,500</option>
-                  <option value="$2,500+">$2,500+</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Project Description</label>
-                <textarea rows="4" required placeholder="Tell us about your model requirements, character concepts, or emotes..." value={formData.description} onChange={(e) => handleInputChange(e, 'description')} className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all resize-none"></textarea>
-              </div>
-
-              <button type="submit" disabled={loading} className="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm shadow-xl shadow-purple-950/30 transition-all transform hover:-translate-y-0.5 cursor-pointer disabled:opacity-50">
-                {loading ? 'Sending...' : 'Send Project Request'} <i className="fa-solid fa-paper-plane ml-1"></i>
-              </button>
-            </form>
+        <section className="manifesto section" aria-label="Our approach">
+          <div className="manifesto-sticky"><span>NEXORA</span></div>
+          <div className="container manifesto-content" data-reveal>
+            <span className="kicker">More than a commission</span>
+            <p>Your audience should recognize your world before they read your name. We combine illustration, movement, and visual strategy to create work that feels <em>alive.</em></p>
           </div>
         </section>
 
+        <section className="services-section section" id="services">
+          <div className="container">
+            <div className="section-heading" data-reveal><div><span className="kicker">What we create</span><h2>A full creative universe.</h2></div><p>One studio, one visual language, and everything you need to show up with confidence.</p></div>
+            <div className="service-list">
+              {services.map((service) => <article className="service-row" key={service.number} data-reveal><span>{service.number}</span><h3>{service.title}</h3><p>{service.text}</p><a href="#contact" onClick={() => selectService(service.title)} aria-label={`Ask about ${service.title}`}><Icon name="arrow" /></a></article>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="packages-section section" id="process">
+          <div className="container">
+            <div className="section-heading" data-reveal><div><span className="kicker">A clear starting point</span><h2>Choose your launchpad.</h2></div><p>Every package is customized. These are creative starting points—not one-size-fits-all boxes.</p></div>
+            <div className="package-grid">
+              {packages.map((pack) => <article className={`package-card ${pack.featured ? 'featured' : ''}`} key={pack.name} data-reveal><span className="package-tag">{pack.tag}</span><h3>{pack.name}</h3><p>{pack.description}</p><ul>{pack.items.map((item) => <li key={item}><Icon name="check" size={17} />{item}</li>)}</ul><button type="button" onClick={() => selectService(pack.service)}>Build my package <Icon name="arrow" size={18} /></button></article>)}
+            </div>
+            <div className="process-strip" data-reveal>
+              {[['01', 'Discover', 'We learn your vision, audience, and must-haves.'], ['02', 'Design', 'Sketches and art direction become a focused visual world.'], ['03', 'Refine', 'Feedback is shaped through clear revision milestones.'], ['04', 'Launch', 'You receive organized, production-ready files.']].map(([num, title, text]) => <div key={num}><span>{num}</span><h3>{title}</h3><p>{text}</p></div>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="contact-section section" id="contact">
+          <div className="container contact-grid">
+            <div className="contact-intro" data-reveal>
+              <span className="kicker">Your world starts here</span>
+              <h2>Let’s make something <em>unforgettable.</em></h2>
+              <p>Tell us where you are now and where you want to go. We’ll reply with next steps within 1–2 business days.</p>
+              <div className="direct-contact"><a href={WHATSAPP_URL} target="_blank" rel="noreferrer"><Icon name="whatsapp" /> Chat on WhatsApp</a><a href="mailto:contact@nexoraglobal.agency"><Icon name="mail" /> contact@nexoraglobal.agency</a></div>
+            </div>
+            <form className="commission-form" onSubmit={submitForm} data-reveal>
+              <div className="field-row">
+                <div className="field"><label htmlFor="name">Your name</label><input id="name" name="name" value={formData.name} onChange={updateField} autoComplete="name" maxLength="100" required /></div>
+                <div className="field"><label htmlFor="email">Email address</label><input id="email" name="email" type="email" value={formData.email} onChange={updateField} autoComplete="email" maxLength="160" required /></div>
+              </div>
+              <div className="field-row">
+                <div className="field"><label htmlFor="phone">Phone / WhatsApp</label><input id="phone" name="phone" type="tel" value={formData.phone} onChange={updateField} autoComplete="tel" maxLength="40" required /></div>
+                <div className="field"><label htmlFor="service">What are we creating?</label><select id="service" name="service" value={formData.service} onChange={updateField} required><option value="" disabled>Select a service</option><option>2D/3D VTuber Modeling</option><option>Chibi Model & Rigging</option><option>Logo & Banner Branding</option><option>Emotes & Sub Badges</option><option>Stream Assets & Overlays</option><option>Manga & Comic Design</option></select></div>
+              </div>
+              <div className="field"><label htmlFor="budget">Estimated budget (USD)</label><select id="budget" name="budget" value={formData.budget} onChange={updateField} required><option value="" disabled>Select a range</option><option>Under $500</option><option>$500–$1,000</option><option>$1,000–$2,500</option><option>$2,500+</option></select></div>
+              <div className="field"><label htmlFor="description">Tell us about the idea</label><textarea id="description" name="description" value={formData.description} onChange={updateField} rows="5" minLength="20" maxLength="3000" placeholder="Character, mood, deliverables, deadline, references…" required /></div>
+              <div className="honeypot" aria-hidden="true"><label htmlFor="website">Website</label><input id="website" name="website" value={formData.website} onChange={updateField} tabIndex="-1" autoComplete="off" /></div>
+              <div className="form-footer"><p>By submitting, you agree to our <a href="/privacy">privacy policy</a>.</p><button className="button button-primary" type="submit" disabled={loading}>{loading ? 'Sending…' : 'Send creative brief'} <Icon name="arrow" /></button></div>
+              {status.message && <p className={`form-status ${status.type}`} role="status">{status.message}</p>}
+            </form>
+          </div>
+        </section>
       </main>
 
-      {/* FULL-SCREEN LIGHTBOX MODAL */}
-      {selectedMedia && (
-        <div 
-          onClick={() => setSelectedMedia(null)}
-          className="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
-        >
-          <button 
-            onClick={() => setSelectedMedia(null)}
-            className="absolute top-6 right-6 text-slate-400 hover:text-white text-3xl font-bold cursor-pointer transition-colors z-10"
-          >
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            className="max-w-4xl max-h-[90vh] bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col"
-          >
-            <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-950/50">
-              <div>
-                <span className={`text-[10px] font-bold tracking-widest ${selectedMedia.color} uppercase`}>{selectedMedia.type}</span>
-                <h3 className="text-lg font-bold text-white">{selectedMedia.title}</h3>
-              </div>
-            </div>
-
-            <div className="p-2 flex items-center justify-center bg-black/40 overflow-auto max-h-[75vh]">
-              {selectedMedia.isVideo ? (
-                <video src={selectedMedia.media} controls autoPlay className="max-h-[70vh] w-auto rounded-lg" />
-              ) : (
-                <img src={selectedMedia.media} alt={selectedMedia.title} className="max-h-[70vh] w-auto object-contain rounded-lg" />
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-{/* FOOTER */}
-      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 border-t border-slate-800 py-3 lg:py-4 px-4 sm:px-6 lg:px-8 shadow-2xl">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-2 lg:gap-4 text-xs sm:text-sm text-slate-400">
-          <div>
-            &copy; 2026 <span className="text-white font-medium">NexoraArts</span>. All rights reserved.
-          </div>
-
-          {/* LEGAL LINKS */}
-          <div className="flex items-center gap-4 text-xs">
-            <Link to="/terms" className="hover:text-purple-400 transition-colors">Terms of Service</Link>
-            <span className="text-slate-700">•</span>
-            <Link to="/privacy" className="hover:text-purple-400 transition-colors">Privacy Policy</Link>
-          </div>
-
-          <div className="flex items-center gap-1.5 bg-slate-950 px-3 py-1 rounded-full border border-slate-800/80">
-            <i className="fa-solid fa-envelope text-purple-400 text-xs"></i>
-            <a href="mailto:syedmunsifali@nexoraglobal.agency" className="hover:text-purple-400 transition-colors font-mono">
-              contact@nexoraglobal.agency
-            </a>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <a href="nexora_arts" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-x-twitter text-base"></i></a>
-            <a href="#" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-twitch text-base"></i></a>
-            <a href="#" className="hover:text-purple-400 transition-colors"><i className="fa-brands fa-discord text-base"></i></a>
-          </div>
-        </div>
+      <footer className="site-footer">
+        <div className="container footer-top"><div><a className="brand" href="#top"><span className="brand-mark"><Icon name="spark" size={19} /></span><span>Nexora<span>Arts</span></span></a><p>Original art for creators building worlds worth remembering.</p></div><div className="footer-links"><div><strong>Explore</strong><a href="#work">Work</a><a href="#services">Services</a><a href="#process">Process</a></div><div><strong>Connect</strong><a href={WHATSAPP_URL} target="_blank" rel="noreferrer">WhatsApp ↗</a><a href={X_URL} target="_blank" rel="noreferrer">X / Twitter ↗</a><a href={`tel:${PHONE}`}>+1 (917) 962-0181</a></div></div></div>
+        <div className="container footer-bottom"><span>© 2026 NexoraArts. All rights reserved.</span><div><a href="/terms">Terms</a><a href="/privacy">Privacy</a></div></div>
       </footer>
+
+      {selectedMedia && <div className="lightbox" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setSelectedMedia(null)}><div className="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" ref={dialogRef} tabIndex="-1"><button className="lightbox-close" type="button" onClick={() => setSelectedMedia(null)} aria-label="Close artwork viewer"><Icon name="close" /></button><div className="lightbox-media"><Media item={selectedMedia} eager /></div><div className="lightbox-caption"><span>{selectedMedia.type}</span><h2 id="lightbox-title">{selectedMedia.title}</h2></div></div></div>}
+
+      <a className="whatsapp-float" href={WHATSAPP_URL} target="_blank" rel="noreferrer" aria-label="Chat with NexoraArts on WhatsApp"><Icon name="whatsapp" /></a>
     </div>
   );
 }

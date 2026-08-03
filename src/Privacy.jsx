@@ -1,47 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+const sections = [
+  ['1. Information we collect', 'When you send a commission request, we collect the information you provide: your name, email address, phone or WhatsApp number, requested service, budget range, and project description. We may also retain commission correspondence, approvals, invoices, and delivery records.'],
+  ['2. How we use information', 'We use this information to review requests, prepare quotes, communicate about projects, process commissions, maintain business records, prevent abuse, and comply with legal obligations. We do not sell or rent personal information.'],
+  ['3. Legal basis and consent', 'We process inquiry information to respond to your request and take steps toward a contract. Project and payment records are processed to perform a contract and meet legitimate business or legal obligations. Where consent is required, you may withdraw it by contacting us.'],
+  ['4. Storage and service providers', 'Inquiry data is stored using Google Firebase and may be processed by providers used for hosting, email, payments, file delivery, or business administration. These providers process information only as needed to deliver their services and may operate in other countries.'],
+  ['5. Retention', 'Unsuccessful inquiry data is normally retained for up to 12 months so we can follow up and prevent abuse. Project, payment, and licensing records may be retained for up to seven years where required for accounting, dispute, or legal purposes. We may keep a minimal record of deletion requests.'],
+  ['6. Security', 'We use reasonable technical and organizational safeguards, but no online service can guarantee absolute security. Please do not submit passwords, payment-card details, government identifiers, or other unnecessary sensitive information through the commission form.'],
+  ['7. Your choices and rights', 'Depending on where you live, you may request access, correction, deletion, restriction, or a copy of your personal information, or object to certain processing. You may also contact your local data-protection authority. We may need to verify your identity before completing a request.'],
+  ['8. Children', 'Our commission service is not directed to children under 13. Clients under the age of legal majority in their location should involve a parent or guardian before entering a paid commission agreement.'],
+  ['9. External links and changes', 'Our site links to external services such as WhatsApp and X. Their privacy practices are governed by their own policies. We may update this notice as our services change and will post the effective date on this page.'],
+  ['10. Contact', 'To ask a privacy question or exercise your rights, email contact@nexoraglobal.agency. Include “Privacy Request” in the subject line and describe your request clearly.'],
+];
 
 export default function Privacy() {
-  return (
-    <div className="bg-slate-950 text-slate-100 min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-8 sm:p-12 shadow-2xl">
-        <Link to="/" className="text-purple-400 hover:text-purple-300 text-sm font-semibold flex items-center gap-2 mb-8">
-          <i className="fa-solid fa-arrow-left"></i> Back to Home
-        </Link>
-        
-        <h1 className="text-3xl font-extrabold text-white mb-2">Privacy Policy</h1>
-        <p className="text-slate-400 text-xs mb-8">Last Updated: July 2026</p>
-
-        <div className="space-y-6 text-slate-300 text-sm leading-relaxed">
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">1. Information We Collect</h2>
-            <p>
-              When you submit an inquiry through our intake form, we collect personal details provided directly by you, including your name, email address, phone number, estimated project budget, and project brief details.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">2. How We Use Your Information</h2>
-            <p>
-              The information collected is strictly used to evaluate your creative project request, send custom pricing quotes, communicate project progress, and manage artwork commissions. We do not sell, rent, or lease your personal data to third parties.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">3. Data Storage & Security</h2>
-            <p>
-              Your project inquiries are securely stored using Google Cloud Firebase services. We implement reasonable technical and organizational measures to safeguard your personal data against unauthorized access or disclosure.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-bold text-white mb-2">4. Contact & Inquiries</h2>
-            <p>
-              For any questions or data requests regarding this Privacy Policy, please contact us at <a href="mailto:contact@nexoraglobal.agency" className="text-purple-400 font-mono underline">contact@nexoraglobal.agency</a>.
-            </p>
-          </section>
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="legal-page"><header className="legal-header"><div className="container"><a className="brand" href="/"><span className="brand-mark">✦</span><span>Nexora<span>Arts</span></span></a><a className="legal-back" href="/">← Back to studio</a></div></header><main className="container legal-layout"><aside><span>Legal</span><h1>Privacy Policy</h1><p>Effective August 3, 2026</p></aside><article><p className="legal-lead">Your ideas can be personal. This policy explains what information we collect when you contact NexoraArts and how we handle it.</p>{sections.map(([title, text]) => <section key={title}><h2>{title}</h2><p>{text}</p></section>)}</article></main><footer className="legal-footer"><div className="container">© 2026 NexoraArts <a href="/terms">Terms of Service</a></div></footer></div>;
 }
