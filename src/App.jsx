@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 const PHONE = '+19179620181';
 const WHATSAPP_URL = 'https://wa.me/19179620181?text=Hi%20NexoraArts%2C%20I%27d%20like%20to%20discuss%20a%20creative%20project.';
-const X_URL = 'https://x.com/NephiiNerine';
+const X_URL = 'https://x.com/Tessa_F98';
 
 const portfolioItems = [
   { category: 'VTuber', title: 'Celestial 2D VTuber', type: 'Character design', media: '/art1.jpeg', featured: true },
